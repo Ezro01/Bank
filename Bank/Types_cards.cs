@@ -18,12 +18,17 @@ namespace Bank
             InitializeComponent();
             if (UserSession.Role == "Role_User")
             {
-                типы_картBindingNavigator.Enabled = false;
-                bindingNavigatorDeleteItem.Enabled = false;
-                bindingNavigatorAddNewItem.Enabled = false;
-                toolStripButtonFind.Enabled = false;
-                checkBoxFind.Enabled = false;
+                типы_картBindingNavigator.Visible = false;
+                bindingNavigatorDeleteItem.Visible = false;
+                bindingNavigatorAddNewItem.Visible = false;
+                toolStripButtonFind.Visible = false;
+                checkBoxFind.Visible = false;
                 типы_картDataGridView.ReadOnly = true;
+                dataGridViewTextBoxColumn1.Visible = false;
+            }
+            if (UserSession.Role == "Manager_Clients")
+            {
+                dataGridViewTextBoxColumn1.Visible = false;
             }
         }
 
