@@ -34,7 +34,7 @@ namespace Bank
             this.Validate();
             this.реквизиты_счётаBindingSource.EndEdit();
 
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
             string query = "SELECT * FROM  Реквизиты_счёта";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -47,6 +47,7 @@ namespace Bank
                     DataTable dataTable = (DataTable)account_detailsBindingSource.DataSource;
                     dataAdapter.Update(dataTable);
                     MessageBox.Show("Данные успешно сохранены!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataBasedOnRole(UserSession.Role, UserSession.Password);
                 }
                 catch (SqlException ex)
                 {
@@ -138,7 +139,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -164,7 +165,7 @@ namespace Bank
         private void LoadPassportComboBox()
         {
             DataTable usersTable = new DataTable();
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

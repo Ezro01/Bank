@@ -34,7 +34,7 @@ namespace Bank
             this.типы_картBindingSource.EndEdit();
 
             // Создаем новый SqlDataAdapter
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
             string query = "SELECT * FROM  Типы_карт"; // Тот же запрос для работы с данными
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -50,6 +50,7 @@ namespace Bank
                     DataTable dataTable = (DataTable)types_cardsBindingSource.DataSource;
                     dataAdapter.Update(dataTable); // Сохраняем изменения в базе данных
                     MessageBox.Show("Данные успешно сохранены!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataBasedOnRole(UserSession.Role, UserSession.Password);
                 }
                 catch (SqlException ex)
                 {
@@ -83,7 +84,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

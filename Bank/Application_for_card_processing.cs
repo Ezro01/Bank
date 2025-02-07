@@ -16,6 +16,12 @@ namespace Bank
         public Application_for_card_processing()
         {
             InitializeComponent();
+            if (UserSession.Role == "Manager_Clients")
+            {
+                dataGridViewTextBoxColumn2.Visible = false;
+            }
+            LoadEmplyeeComboBox();
+            LoadNumber_ApplicationtsComboBox();
         }
 
         private void заявление_на_оформление_картыBindingNavigatorSaveItem_Click(object sender, EventArgs e)
@@ -25,7 +31,7 @@ namespace Bank
             this.заявление_на_оформление_картыBindingSource.EndEdit();
 
             // Создаем новый SqlDataAdapter
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
             string query = "SELECT * FROM  Заявление_на_оформление_карты"; // Тот же запрос для работы с данными
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -41,6 +47,7 @@ namespace Bank
                     DataTable dataTable = (DataTable)application_for_card_processingBindingSource.DataSource;
                     dataAdapter.Update(dataTable); // Сохраняем изменения в базе данных
                     MessageBox.Show("Данные успешно сохранены!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataBasedOnRole(UserSession.Role, UserSession.Password);
                 }
                 catch (SqlException ex)
                 {
@@ -74,7 +81,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -219,6 +226,86 @@ namespace Bank
                     MessageBox.Show("Нет совпадений по фильтру!", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+        }
+
+        private void LoadEmplyeeComboBox()
+        {
+            if (UserSession.Role == "Admin_BD")
+            {
+                DataTable usersTable = new DataTable();
+                string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    try
+                    {
+                        conn.Open();
+                        string query = "SELECT ID_Сотрудника, Фамилия, Имя, Отчество FROM Сотрудники_банка";
+
+                        SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                        adapter.Fill(usersTable);
+
+                        // Добавляем новый столбец
+                        usersTable.Columns.Add("FullEmplyee", typeof(string));
+
+                        // Заполняем столбец вручную
+                        foreach (DataRow row in usersTable.Rows)
+                        {
+                            row["FullEmplyee"] = $"{row["Фамилия"]} {row["Имя"]} {row["Отчество"]}";
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show($"Ошибка при загрузке паспортных данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+                if (заявление_на_оформление_картыDataGridView.Columns["dataGridViewTextBoxColumn2"] is DataGridViewComboBoxColumn comboBoxColumn)
+                {
+                    comboBoxColumn.DataSource = usersTable;
+                    comboBoxColumn.DisplayMember = "FullEmplyee";              // Показываем "Серия Номер"
+                    comboBoxColumn.ValueMember = "ID_Сотрудника";             // В БД записываем ID
+                }
+            }
+        }
+        private void LoadNumber_ApplicationtsComboBox()
+        {
+            
+            DataTable usersTable = new DataTable();
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT Номер_счёта FROM Реквизиты_счёта";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    adapter.Fill(usersTable);
+
+                    // Добавляем новый столбец
+                    usersTable.Columns.Add("Number_Applicationts", typeof(string));
+
+                    // Заполняем столбец вручную
+                    foreach (DataRow row in usersTable.Rows)
+                    {
+                        row["Number_Applicationts"] = $"{row["Номер_счёта"]}";
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке паспортных данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if (заявление_на_оформление_картыDataGridView.Columns["dataGridViewTextBoxColumn3"] is DataGridViewComboBoxColumn comboBoxColumn)
+            {
+                comboBoxColumn.DataSource = usersTable;
+                comboBoxColumn.DisplayMember = "Number_Applicationts";              // Показываем "Серия Номер"
+                comboBoxColumn.ValueMember = "Номер_счёта";             // В БД записываем ID
+            }
+         
         }
     }
 }

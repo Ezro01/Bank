@@ -23,6 +23,7 @@ namespace Bank
                 checkBoxFind.Enabled = false;
                 паспортDataGridView.ReadOnly = true;
             }
+            LoadPassportComboBox();
         }
 
         private void паспортBindingNavigatorSaveItem_Click(object sender, EventArgs e)
@@ -32,7 +33,7 @@ namespace Bank
             this.паспортBindingSource.EndEdit();
 
             // Создаем новый SqlDataAdapter
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
             string query = "SELECT * FROM Паспорт"; // Тот же запрос для работы с данными
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -48,6 +49,7 @@ namespace Bank
                     DataTable dataTable = (DataTable)passportBindingSource.DataSource;
                     dataAdapter.Update(dataTable); // Сохраняем изменения в базе данных
                     MessageBox.Show("Данные успешно сохранены!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataBasedOnRole(UserSession.Role, UserSession.Password);
                 }
                 catch (SqlException ex)
                 {
@@ -81,7 +83,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -229,5 +231,46 @@ namespace Bank
                 }
             }
         }
+
+
+        private void LoadPassportComboBox()
+        {
+            DataTable usersTable = new DataTable();
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT ID_Пользователя FROM Пользователь"; // Измените запрос, если нужно больше данных
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    adapter.Fill(usersTable); // Заполняем DataTable данными
+
+                    // Если необходимо, добавляем новый столбец
+                    usersTable.Columns.Add("FullID", typeof(string));
+
+                    // Заполняем столбец "FullID" значениями
+                    foreach (DataRow row in usersTable.Rows)
+                    {
+                        row["FullID"] = row["ID_Пользователя"].ToString(); // Добавляем ID в строку для отображения
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            // Привязываем DataGridViewComboBoxColumn к данным
+            if (паспортDataGridView.Columns["dataGridViewTextBoxColumn2"] is DataGridViewComboBoxColumn comboBoxColumn)
+            {
+                comboBoxColumn.DataSource = usersTable; // Источник данных
+                comboBoxColumn.DisplayMember = "FullID"; // Что будет отображаться в ComboBox
+                comboBoxColumn.ValueMember = "ID_Пользователя"; // Что будет сохраняться в БД
+            }
+        }
+
     }
 }

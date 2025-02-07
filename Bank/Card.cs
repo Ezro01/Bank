@@ -16,6 +16,8 @@ namespace Bank
         public Card()
         {
             InitializeComponent();
+            LoadNumberComboBox();
+            LoadID_Types_CarsComboBox();
         }
 
         private void картаBindingNavigatorSaveItem_Click(object sender, EventArgs e)
@@ -25,7 +27,7 @@ namespace Bank
             this.картаBindingSource.EndEdit();
 
             // Создаем новый SqlDataAdapter
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
             string query = "SELECT * FROM Карта"; // Тот же запрос для работы с данными
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -41,6 +43,7 @@ namespace Bank
                     DataTable dataTable = (DataTable)cardBindingSource.DataSource;
                     dataAdapter.Update(dataTable); // Сохраняем изменения в базе данных
                     MessageBox.Show("Данные успешно сохранены!", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataBasedOnRole(UserSession.Role, UserSession.Password);
                 }
                 catch (SqlException ex)
                 {
@@ -74,7 +77,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -218,6 +221,82 @@ namespace Bank
                 {
                     MessageBox.Show("Нет совпадений по фильтру!", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+        }
+        private void LoadNumberComboBox()
+        {
+            DataTable usersTable = new DataTable();
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT Номер_заявления FROM Заявление_на_оформление_карты";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    adapter.Fill(usersTable);
+
+                    // Добавляем новый столбец
+                    usersTable.Columns.Add("FullNumber", typeof(string));
+
+                    // Заполняем столбец вручную
+                    foreach (DataRow row in usersTable.Rows)
+                    {
+                        row["FullNumber"] = $"{row["Номер_заявления"]}";
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке паспортных данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if (картаDataGridView.Columns["dataGridViewTextBoxColumn2"] is DataGridViewComboBoxColumn comboBoxColumn)
+            {
+                comboBoxColumn.DataSource = usersTable;
+                comboBoxColumn.DisplayMember = "FullNumber";              // Показываем "Серия Номер"
+                comboBoxColumn.ValueMember = "Номер_заявления";             // В БД записываем ID
+            }
+        }
+
+
+        private void LoadID_Types_CarsComboBox()
+        {
+            DataTable usersTable = new DataTable();
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={UserSession.Password};";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT ID_Типа_карты, Описание FROM Типы_карт";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    adapter.Fill(usersTable);
+
+                    // Добавляем новый столбец
+                    usersTable.Columns.Add("FullID_cards", typeof(string));
+
+                    // Заполняем столбец вручную
+                    foreach (DataRow row in usersTable.Rows)
+                    {
+                        row["FullID_cards"] = $"{row["Описание"]}";
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке паспортных данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if (картаDataGridView.Columns["dataGridViewTextBoxColumn3"] is DataGridViewComboBoxColumn comboBoxColumn)
+            {
+                comboBoxColumn.DataSource = usersTable;
+                comboBoxColumn.DisplayMember = "FullID_cards";              // Показываем "Серия Номер"
+                comboBoxColumn.ValueMember = "ID_Типа_карты";             // В БД записываем ID
             }
         }
     }
