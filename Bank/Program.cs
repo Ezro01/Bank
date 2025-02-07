@@ -16,7 +16,18 @@ namespace Bank
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            Auth authForm = new Auth();
+
+            // Если авторизация успешна, запускаем главную форму
+            if (authForm.ShowDialog() == DialogResult.OK)
+            {
+                Application.Run(new Main());  // Открываем главную форму после успешной авторизации
+            }
+            else
+            {
+                // Если авторизация не успешна, завершаем приложение
+                Application.Exit();
+            }
         }
     }
 }

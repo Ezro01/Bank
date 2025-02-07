@@ -4,20 +4,24 @@
     {
         public static string Username { get; private set; }
         public static string Role { get; private set; }
-        public static string Password { get; private set; } // Новый параметр для пароля
+        public static string Password { get; private set; }
 
-        public static void SetUser(string username, string role, string password)
+        public static string Server { get; private set; }
+
+        public static void SetUser(string username, string role, string password, string server)
         {
             Username = username;
             Role = role;
-            Password = password;  // Устанавливаем пароль
+            Password = password;  
+            Server = server;
         }
 
         public static void Clear()
         {
             Username = null;
             Role = null;
-            Password = null;  // Очищаем пароль
+            Password = null;
+            Server = null;
         }
     }
 }

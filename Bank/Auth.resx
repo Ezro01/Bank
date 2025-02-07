@@ -121,7 +121,7 @@
   <data name="pictureBox1.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DgAACw4BQL7hQQAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
+        DQAACw0B7QfALAAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
         im1iQ8VOdNkVKxoVFTX2OopjQUejsSA2sABKRzK/ZwCD8vBy733PuWfvfT7ftT5ruRTh5ex9nn3vOXv/
         /5tIkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
         kiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
@@ -244,7 +244,7 @@
   <data name="pictureBox1.ErrorImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DgAACw4BQL7hQQAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
+        DQAACw0B7QfALAAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
         im1iQ8VOdNkVKxoVFTX2OopjQUejsSA2sABKRzK/ZwCD8vBy733PuWfvfT7ftT5ruRTh5ex9nn3vOXv/
         /5tIkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
         kiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
@@ -367,7 +367,7 @@
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DgAACw4BQL7hQQAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
+        DQAACw0B7QfALAAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
         im1iQ8VOdNkVKxoVFTX2OopjQUejsSA2sABKRzK/ZwCD8vBy733PuWfvfT7ftT5ruRTh5ex9nn3vOXv/
         /5tIkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
         kiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
@@ -490,7 +490,7 @@
   <data name="pictureBox1.InitialImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DgAACw4BQL7hQQAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
+        DQAACw0B7QfALAAAG2FJREFUeF7t3Qe0dXV553GaiAhq7DWKqEQsmGCMEWKJCDYsUUaIZST2zCgjojgq
         im1iQ8VOdNkVKxoVFTX2OopjQUejsSA2sABKRzK/ZwCD8vBy733PuWfvfT7ftT5ruRTh5ex9nn3vOXv/
         /5tIkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
         kiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ
@@ -610,4 +610,7 @@
         m/w/JGyA0ux24kYAAAAASUVORK5CYII=
 </value>
   </data>
+  <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

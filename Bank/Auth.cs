@@ -1,36 +1,87 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Bank
 {
     public partial class Auth : Form
     {
+        private string serverFilePath = "C:\\Все папки по жизни\\Универ\\5 семестр\\Курсовая БСБД\\Приложение\\Bank\\Bank\\server.txt";  // Путь к файлу с серверами
+        private string databaseName = "Bank_ultimate_version";  // Название базы данных
+
         public Auth()
         {
             InitializeComponent();
+            LoadServerNames(); // Загружаем сервера при старте программы
         }
 
-        private string serverName = "DESKTOP-3P3899D\\SQLEXPRESS"; // Имя сервера
-        private string databaseName = "Bank_ultimate_version";    // Название базы данных
+        private void LoadServerNames()
+        {
+            if (File.Exists(serverFilePath))
+            {
+                // Читаем все серверы из файла и убираем пустые или дублирующиеся строки
+                string[] servers = File.ReadAllLines(serverFilePath)
+                                       .Select(s => s.Trim())
+                                       .Where(s => !string.IsNullOrEmpty(s))
+                                       .Distinct()
+                                       .ToArray();
+
+                if (servers.Length > 0)
+                {
+                    textBox_server.Text = servers[0];  // Автозаполнение первым сервером
+                }
+                else
+                {
+                    MessageBox.Show("Нет доступных серверов в файле.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Файл с серверами не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void SaveServerName(string serverName)
+        {
+            // Проверяем, если сервер не пустой и его нет в списке
+            if (!string.IsNullOrWhiteSpace(serverName))
+            {
+                string[] existingServers = File.Exists(serverFilePath)
+                    ? File.ReadAllLines(serverFilePath)
+                    : Array.Empty<string>();
+
+                // Добавляем сервер в файл, если его нет
+                if (!existingServers.Contains(serverName))
+                {
+                    File.AppendAllText(serverFilePath, serverName + Environment.NewLine);
+                }
+            }
+        }
 
         private void button_auth_Click(object sender, EventArgs e)
         {
             string username = textBox_auth.Text;
             string password = textBox_pass.Text;
+            string serverName = textBox_server.Text;  // Читаем сервер из textBox_server
 
-            // Попытка подключения к базе данных с использованием введённых логина и пароля
-            if (TryConnectToDatabase(username, password))
+            if (string.IsNullOrWhiteSpace(serverName))
             {
-                // Назначаем роль в зависимости от логина пользователя
-                string role = AssignRoleBasedOnUsername(username);
+                MessageBox.Show("Ошибка: Имя сервера не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                // Проверяем, что роль назначена, и продолжаем авторизацию
+            // Сохраняем сервер в файл
+            SaveServerName(serverName);
+
+            // Пытаемся подключиться к БД
+            if (TryConnectToDatabase(username, password, serverName))
+            {
+                string role = AssignRoleBasedOnUsername(username);
                 if (role != null)
                 {
-                    // Запоминаем роль, пользователя и пароль
-                    UserSession.SetUser(username, role, password);
-
+                    UserSession.SetUser(username, role, password, serverName); // Запоминаем сессию пользователя
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
@@ -41,33 +92,28 @@ namespace Bank
             }
             else
             {
-                MessageBox.Show("Ошибка: Неверные логин или пароль.", "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка: Неверный логин или пароль.", "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // Метод для подключения к базе данных и проверки логина и пароля
-        private bool TryConnectToDatabase(string username, string password)
+        private bool TryConnectToDatabase(string username, string password, string serverName)
         {
             string connectionString = $"Server={serverName};Database={databaseName};User Id={username};Password={password};";
+            MessageBox.Show($"Подключение к серверу: {serverName}", "Отладка", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    MessageBox.Show("Подключение успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return true;
                 }
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 18456) // Ошибка аутентификации
-                {
-                    MessageBox.Show("Ошибка: Неверный логин или пароль.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Ошибка подключения к базе данных: " + ex.Message, "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show($"Ошибка подключения:\n\nКод ошибки: {ex.Number}\nСообщение: {ex.Message}",
+                                "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }

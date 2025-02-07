@@ -10,6 +10,7 @@ namespace Bank
         public Pasport()
         {
             InitializeComponent();
+            dataGridViewTextBoxColumn1.Visible = false;
             // Проверка роли пользователя при загрузке формы
             if (UserSession.Role == "Role_User")
             {

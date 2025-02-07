@@ -16,23 +16,20 @@ namespace Bank
         public Main()
         {
             InitializeComponent();
-        }
-
-        private void Main_Load(object sender, EventArgs e)
-        {
-            ShowLoginForm();
-        }
-
-        private void ShowLoginForm()
-        {
-            var loginForm = new Auth();
-            var result = loginForm.ShowDialog();
-
-            if (result == DialogResult.Cancel)
+            if (UserSession.Role == "Manager_Clients")
             {
-                Close();
+                сотрудникиToolStripMenuItem.Enabled = false;
+                сотрудникиToolStripMenuItem.Visible = false;
+            }
+
+            if (UserSession.Role == "Role_User")
+            {
+                сотрудникиToolStripMenuItem.Enabled = false;
+                сотрудникиToolStripMenuItem.Visible = false;
             }
         }
+
+
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
