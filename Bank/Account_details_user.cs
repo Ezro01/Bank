@@ -19,9 +19,9 @@ namespace Bank
             if (UserSession.Role == "Role_User")
             {
                 // Блокируем кнопку сохранения для пользователей с ролью Role_User
-                vw_Реквизиты_счёта_РольUserBindingNavigatorSaveItem.Enabled = false;
-                bindingNavigatorDeleteItem.Enabled = false;
-                bindingNavigatorAddNewItem.Enabled = false;
+                vw_Реквизиты_счёта_РольUserBindingNavigatorSaveItem.Visible = false;
+                bindingNavigatorDeleteItem.Visible = false;
+                bindingNavigatorAddNewItem.Visible = false;
             }
         }
 

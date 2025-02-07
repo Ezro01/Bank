@@ -17,9 +17,9 @@ namespace Bank
         {
             InitializeComponent();
             // Блокируем кнопку сохранения для пользователей с ролью Role_User
-            vw_Заявление_на_оформление_карты_РольUserBindingNavigator.Enabled = false;
-            bindingNavigatorDeleteItem.Enabled = false;
-            bindingNavigatorAddNewItem.Enabled = false;
+            vw_Заявление_на_оформление_карты_РольUserBindingNavigator.Visible = false;
+            bindingNavigatorDeleteItem.Visible = false;
+            bindingNavigatorAddNewItem.Visible = false;
         }
 
         private void Application_for_card_processing_user_Load(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"{UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

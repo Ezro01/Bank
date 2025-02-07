@@ -16,9 +16,9 @@ namespace Bank
         public User_user()
         {
             InitializeComponent();
-            vw_Пользователь_ПрофильBindingNavigatorSaveItem.Enabled = false;
-            bindingNavigatorDeleteItem.Enabled = false;
-            bindingNavigatorAddNewItem.Enabled = false;
+            vw_Пользователь_ПрофильBindingNavigatorSaveItem.Visible = false;
+            bindingNavigatorDeleteItem.Visible = false;
+            bindingNavigatorAddNewItem.Visible = false;
         }
 
         private void User_user_Load(object sender, EventArgs e)
@@ -45,7 +45,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

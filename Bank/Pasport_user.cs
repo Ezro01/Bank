@@ -19,9 +19,9 @@ namespace Bank
             if (UserSession.Role == "Role_User")
             {
                 // Блокируем кнопку сохранения для пользователей с ролью Role_User
-                vw_Pasport_RoleUserBindingNavigatorSaveItem.Enabled = false;
-                bindingNavigatorDeleteItem.Enabled = false;
-                bindingNavigatorAddNewItem.Enabled = false;
+                vw_Pasport_RoleUserBindingNavigatorSaveItem.Visible = false;
+                bindingNavigatorDeleteItem.Visible = false;
+                bindingNavigatorAddNewItem.Visible = false;
             }
         }
 
@@ -51,7 +51,7 @@ namespace Bank
 
         private void LoadDataBasedOnRole(string role, string password)
         {
-            string connectionString = $"Server=DESKTOP-3P3899D\\SQLEXPRESS;Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
+            string connectionString = $"Server={UserSession.Server};Database=Bank_ultimate_version;User Id={UserSession.Username};Password={password};";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
